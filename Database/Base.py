@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine, MetaData
 
-engine = create_engine("postgresql+asyncpg://postgres:1005185673@localhost:5432/Medidor")
+engine = create_engine("mysql+pymysql://root:Oo1005185673@localhost:3306/Prueba")
 
 meta = MetaData()
 
-con = engine.connect()
+conn = engine.connect()

@@ -1,4 +1,6 @@
 from fastapi import APIRouter
+from Database.Base import conn
+from Models.Model_User import Model_User as M_User
 
 Route_user = APIRouter()
 
@@ -6,9 +8,9 @@ Route_user = APIRouter()
 def HelloWorld():
     return "Hello world"
 
-@Route_user.get('/user/')
+@Route_user.get('/users/')
 def Users():
-    return "Hello world"
+    return conn.execute(M_User.select()).fetchall()
 
 @Route_user.post('/user/')
 def Create_User():
