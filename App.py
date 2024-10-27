@@ -1,18 +1,10 @@
 from fastapi import FastAPI, HTTPException
-from sqlalchemy import Column, Integer, String, create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy import Column, Integer, String
 from pydantic import BaseModel
+from Database.Base import Base, engine, db
 
 # Configuración de la base de datos
-DATABASE_URL = "postgresql://postgres:1005185673@localhost:5432/Medidor"
 
-# Crear el motor de la base de datos
-engine = create_engine(DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-# Crear una clase base
-Base = declarative_base()
 
 # Definición del modelo Usuario
 class Usuario(Base):
@@ -23,7 +15,7 @@ class Usuario(Base):
     correo = Column(String, unique=True, nullable=False)
 
 # Crear las tablas en la base de datos
-Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(engine)
 
 # Crear la instancia de FastAPI
 app = FastAPI()
@@ -40,29 +32,36 @@ class UsuarioResponse(BaseModel):
     correo: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
-# Crear un nuevo usuario
-@app.post("/usuarios/", response_model=UsuarioResponse)
-def create_usuario(usuario: UsuarioCreate):
-    db: Session = SessionLocal()
-    new_usuario = Usuario(nombre=usuario.nombre, correo=usuario.correo)
-    db.add(new_usuario)
-    db.commit()
-    db.refresh(new_usuario)
-    db.close()
-    return new_usuario
+@app.get("/")
+def HelloWorld():
+    return {"message": "Funcionando"}
 
 # Obtener un usuario por ID
-@app.get("/usuarios/{usuario_id}", response_model=UsuarioResponse)
-def read_usuario(usuario_id: int):
-    db: Session = SessionLocal()
+@app.get("/usuarios/",  response_model=list[UsuarioResponse])
+def List_Usuarios():
+    usuarios = db.query(Usuario).all()
+    db.close()
+    if usuarios is None:
+        raise HTTPException(status_code=404, detail="No hay Usuarios")
+    return usuarios
+
+# Obtener un usuario por ID
+@app.get("/usuario/{usuario_id}", response_model=UsuarioResponse)
+def Search_Usuario(usuario_id: int):
     usuario = db.query(Usuario).filter(Usuario.id == usuario_id).first()
     db.close()
     if usuario is None:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
     return usuario
 
-@app.get("/")
-def read_root():
-    return {"message": "Funcionando"}
+# Crear un nuevo usuario
+@app.post("/usuario/", response_model=UsuarioResponse)
+def Create_Usuario(usuario: UsuarioCreate):
+    new_usuario = Usuario(nombre=usuario.nombre, correo=usuario.correo)
+    db.add(new_usuario)
+    db.commit()
+    db.refresh(new_usuario)
+    db.close()
+    return new_usuario
