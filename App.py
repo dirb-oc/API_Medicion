@@ -3,7 +3,7 @@ from Router.User_Router import user
 
 app = FastAPI()
 @app.get("/")
-def Home():
+def Strar():
     return {"System": "Operation"}
 
 app.include_router(user)
