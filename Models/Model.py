@@ -3,21 +3,21 @@ from sqlalchemy import Column, BigInteger, Numeric, Text, Date, ForeignKey, TIME
 from sqlalchemy.orm import relationship
 from Database.Base import Base, engine
 
-# class Location(Base):
-#     __tablename__ = "locations"
-#     id = Column(BigInteger, primary_key=True, index=True)
-#     latitude = Column(Numeric)
-#     longitude = Column(Numeric)
-#     name_place = Column(Text)
-#     devices = relationship("Device", back_populates="location")
+class Location(Base):
+    __tablename__ = "locations"
+    id = Column(BigInteger, primary_key=True, index=True)
+    latitude = Column(Numeric)
+    longitude = Column(Numeric)
+    name_place = Column(Text)
+    devices = relationship("Device", back_populates="location")
 
-# class Device(Base):
-#     __tablename__ = "devices"
-#     id = Column(BigInteger, primary_key=True, index=True)
-#     device_name = Column(Text)
-#     installation_date = Column(Date)
-#     location_id = Column(BigInteger, ForeignKey("locations.id"))
-#     location = relationship("Location", back_populates="devices")
+class Device(Base):
+    __tablename__ = "devices"
+    id = Column(BigInteger, primary_key=True, index=True)
+    device_name = Column(Text)
+    installation_date = Column(Date)
+    location_id = Column(BigInteger, ForeignKey("locations.id"))
+    location = relationship("Location", back_populates="devices")
 
 class Unit(Base):
     __tablename__ = "unit"
