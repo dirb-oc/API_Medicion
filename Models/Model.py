@@ -19,10 +19,10 @@ from Database.Base import Base, engine
 #     location_id = Column(BigInteger, ForeignKey("locations.id"))
 #     location = relationship("Location", back_populates="devices")
 
-# class Unit(Base):
-#     __tablename__ = "unit"
-#     id = Column(BigInteger, primary_key=True, index=True)
-#     unit = Column(Text)
+class Unit(Base):
+    __tablename__ = "unit"
+    id = Column(BigInteger, primary_key=True, index=True)
+    unit = Column(Text)
 
 # class Sensor(Base):
 #     __tablename__ = "sensor"
