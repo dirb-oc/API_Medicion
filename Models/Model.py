@@ -18,21 +18,23 @@ class Device(Base):
     installation_date = Column(Date)
     location_id = Column(BigInteger, ForeignKey("locations.id"))
     location = relationship("Location", back_populates="devices")
+    sensors = relationship("Sensor", back_populates="device")
 
 class Unit(Base):
     __tablename__ = "unit"
     id = Column(BigInteger, primary_key=True, index=True)
     unit = Column(Text)
+    sensors = relationship("Sensor", back_populates="unit")
 
-# class Sensor(Base):
-#     __tablename__ = "sensor"
-#     id = Column(BigInteger, primary_key=True, index=True)
-#     sensor_name = Column(Text)
-#     function = Column(Text)
-#     device_id = Column(BigInteger, ForeignKey("devices.id"))
-#     unit_id = Column(BigInteger, ForeignKey("unit.id"))
-#     device = relationship("Device", back_populates="sensors")
-#     unit = relationship("Unit", back_populates="sensors")
+class Sensor(Base):
+    __tablename__ = "sensor"
+    id = Column(BigInteger, primary_key=True, index=True)
+    sensor_name = Column(Text)
+    function = Column(Text)
+    device_id = Column(BigInteger, ForeignKey("devices.id"))
+    unit_id = Column(BigInteger, ForeignKey("unit.id"))
+    device = relationship("Device", back_populates="sensors")
+    unit = relationship("Unit", back_populates="sensors")
 
 # class Record(Base):
 #     __tablename__ = "record"
