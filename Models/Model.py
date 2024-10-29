@@ -35,13 +35,15 @@ class Sensor(Base):
     unit_id = Column(BigInteger, ForeignKey("unit.id"))
     device = relationship("Device", back_populates="sensors")
     unit = relationship("Unit", back_populates="sensors")
+    records = relationship("Record", back_populates="sensor")
 
-# class Record(Base):
-#     __tablename__ = "record"
-#     id = Column(BigInteger, primary_key=True, index=True)
-#     sensor_id = Column(BigInteger, ForeignKey("sensor.id"))
-#     value = Column(Numeric)
-#     time = Column(TIMESTAMP(timezone=True))
+class Record(Base):
+    __tablename__ = "record"
+    id = Column(BigInteger, primary_key=True, index=True)
+    sensor_id = Column(BigInteger, ForeignKey("sensor.id"))
+    value = Column(Numeric)
+    time = Column(TIMESTAMP(timezone=True))
+    sensor = relationship("Sensor", back_populates="records")
 
 class User(Base):
     __tablename__ = "users"
