@@ -3,10 +3,10 @@ from Database.Base import db
 from Models.Model import Unit
 from Schemas.Schema_Unit import UnitResponse, UnitCreate
 
-unit = APIRouter(tags=["Unidad de Medida"])
+unit_R = APIRouter(tags=["Unidad de Medida"])
 
 # Obtener los usuarios
-@unit.get("/units",  response_model=list[UnitResponse])
+@unit_R.get("/units",  response_model=list[UnitResponse])
 def List_Units():
     unidades = db.query(Unit).all()
     # Comprobar si el usuario exite
@@ -16,7 +16,7 @@ def List_Units():
     return unidades
 
 # Obtener un usuario por ID
-@unit.get("/unit/{id}", response_model=UnitResponse)
+@unit_R.get("/unit/{id}", response_model=UnitResponse)
 def Search_Unit(id: int):
     unidad = db.query(Unit).filter(Unit.id == id).first()
     # Comprobar si el usuario exite
@@ -25,7 +25,7 @@ def Search_Unit(id: int):
     return unidad
 
 # Crear un nuevo usuario
-@unit.post("/unit", response_model=UnitResponse)
+@unit_R.post("/unit", response_model=UnitResponse)
 def Create_Unit(unidad: UnitCreate):
     new_unit = Unit(
         unit = unidad.unit,
@@ -38,7 +38,7 @@ def Create_Unit(unidad: UnitCreate):
     return new_unit
 
 # Actualizar usuario
-@unit.put("/unit/{id}", response_model=UnitResponse)
+@unit_R.put("/unit/{id}", response_model=UnitResponse)
 def update_Unit(id: int, unidad: UnitCreate):
     # Busca al usuario existente
     db_unidad = db.query(Unit).filter(Unit.id == id).first()
@@ -54,7 +54,7 @@ def update_Unit(id: int, unidad: UnitCreate):
     return db_unidad
 
 # Eliminiar Usuario
-@unit.delete("/unit/{id}", response_model=UnitResponse)
+@unit_R.delete("/unit/{id}", response_model=UnitResponse)
 def delete_Unit(id: int):
     unidad = db.query(Unit).filter(Unit.id == id).first()
     # Comprobar si el usuario exite

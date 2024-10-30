@@ -19,6 +19,7 @@ class Device(Base):
     location_id = Column(BigInteger, ForeignKey("locations.id"))
     location = relationship("Location", back_populates="devices")
     sensors = relationship("Sensor", back_populates="device")
+    users = relationship("UserDevice", back_populates="device")
 
 class Unit(Base):
     __tablename__ = "unit"
@@ -52,13 +53,15 @@ class User(Base):
     email = Column(Text)
     secondname = Column(Text)
     person = Column(Numeric)
+    devices = relationship("UserDevice", back_populates="user")
 
-# class UserDevice(Base):
-#     __tablename__ = "user_device"
-#     id = Column(BigInteger, primary_key=True, index=True)
-#     user_id = Column(BigInteger, ForeignKey("users.id"))
-#     device_id = Column(BigInteger, ForeignKey("devices.id"))
-
+class UserDevice(Base):
+    __tablename__ = "user_device" 
+    id = Column(BigInteger, primary_key=True, index=True)
+    user_id = Column(BigInteger, ForeignKey("users.id"), nullable=False)
+    device_id = Column(BigInteger, ForeignKey("devices.id"), nullable=False)
+    user = relationship("User", back_populates="devices")
+    device = relationship("Device", back_populates="users")
 
 # Crear las tablas en la base de datos
 Base.metadata.create_all(engine)

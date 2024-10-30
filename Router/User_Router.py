@@ -3,10 +3,10 @@ from Database.Base import db
 from Models.Model import User
 from Schemas.Schema_User import UserResponse, UserCreate
 
-user = APIRouter(tags=["Usuario"])
+user_R = APIRouter(tags=["Usuario"])
 
 # Obtener los usuarios
-@user.get("/users",  response_model=list[UserResponse])
+@user_R.get("/users",  response_model=list[UserResponse])
 def List_Users():
     usuarios = db.query(User).all()
     # Comprobar si el usuario exite
@@ -16,7 +16,7 @@ def List_Users():
     return usuarios
 
 # Obtener un usuario por ID
-@user.get("/user/{id}", response_model=UserResponse)
+@user_R.get("/user/{id}", response_model=UserResponse)
 def Search_User(id: int):
     usuario = db.query(User).filter(User.id == id).first()
     # Comprobar si el usuario exite
@@ -25,7 +25,7 @@ def Search_User(id: int):
     return usuario
 
 # Crear un nuevo usuario
-@user.post("/user", response_model=UserResponse)
+@user_R.post("/user", response_model=UserResponse)
 def Create_User(usuario: UserCreate):
     new_usuario = User(
         name = usuario.name,
@@ -41,7 +41,7 @@ def Create_User(usuario: UserCreate):
     return new_usuario
 
 # Actualizar usuario
-@user.put("/user/{id}", response_model=UserResponse)
+@user_R.put("/user/{id}", response_model=UserResponse)
 def update_User(id: int, usuario: UserCreate):
     # Busca al usuario existente
     db_usuario = db.query(User).filter(User.id == id).first()
@@ -60,7 +60,7 @@ def update_User(id: int, usuario: UserCreate):
     return db_usuario
 
 # Eliminiar Usuario
-@user.delete("/user/{id}", response_model=UserResponse)
+@user_R.delete("/user/{id}", response_model=UserResponse)
 def delete_User(id: int):
     usuario = db.query(User).filter(User.id == id).first()
     # Comprobar si el usuario exite

@@ -3,10 +3,10 @@ from Database.Base import db
 from Models.Model import Location
 from Schemas.Schema_Location import LocationResponse, LocationCreate
 
-location = APIRouter(tags=["Ubicación"])
+location_R = APIRouter(tags=["Ubicación"])
 
 # Obtener los usuarios
-@location.get("/locations",  response_model=list[LocationResponse])
+@location_R.get("/locations", response_model=list[LocationResponse])
 def List_Locations():
     Lugares = db.query(Location).all()
     # Comprobar si el usuario exite
@@ -16,7 +16,7 @@ def List_Locations():
     return Lugares
 
 # Obtener un usuario por ID
-@location.get("/location/{id}", response_model=LocationResponse)
+@location_R.get("/location/{id}", response_model=LocationResponse)
 def Search_Locations(id: int):
     lugar = db.query(Location).filter(Location.id == id).first()
     # Comprobar si el usuario exite
@@ -25,7 +25,7 @@ def Search_Locations(id: int):
     return lugar
 
 # Crear un nuevo usuario
-@location.post("/location", response_model=LocationResponse)
+@location_R.post("/location", response_model=LocationResponse)
 def Create_Location(Lugar: LocationCreate):
     new_lugar = Location(
         latitude = Lugar.latitude,
@@ -40,7 +40,7 @@ def Create_Location(Lugar: LocationCreate):
     return new_lugar
 
 # Actualizar usuario
-@location.put("/location/{id}", response_model=LocationResponse)
+@location_R.put("/location/{id}", response_model=LocationResponse)
 def update_Location(id: int, Lugar: LocationCreate):
     # Busca al usuario existente
     db_lugar = db.query(Location).filter(Location.id == id).first()
@@ -58,7 +58,7 @@ def update_Location(id: int, Lugar: LocationCreate):
     return db_lugar
 
 # Eliminiar Usuario
-@location.delete("/location/{id}", response_model=LocationResponse)
+@location_R.delete("/location/{id}", response_model=LocationResponse)
 def delete_Location(id: int):
     lugar = db.query(Location).filter(Location.id == id).first()
     # Comprobar si el usuario exite
