@@ -5,23 +5,27 @@ from Schemas.Schema_USE import Use_DCreate, Use_DResponse
 
 relation_R = APIRouter(tags=["Relacion Usuarios y Dispositivos"])
 
-# Obtener todos los usuarios
+
 @relation_R.get("/relations", response_model=list[Use_DResponse])
 def list_Relations():
     relaciones = db.query(UserDevice).all()
+
     if not relaciones:
         raise HTTPException(status_code=404, detail="No hay relaciones de usuarios y dispositivos.")
+    
     return relaciones
 
-# Obtener un usuario por ID
+
 @relation_R.get("/relation/{id}", response_model=Use_DResponse)
 def search_Relation(id: int):
     relacion = db.query(UserDevice).filter(UserDevice.id == id).first()
+
     if relacion is None:
         raise HTTPException(status_code=404, detail="Relación de usuario y dispositivo no encontrada.")
+    
     return relacion
 
-# Crear una nueva relación de usuario y dispositivo
+
 @relation_R.post("/relation", response_model=Use_DResponse)
 def create_Relation(relation_data: Use_DCreate):
     user = db.query(User).filter(User.id == relation_data.user_id).first()
@@ -41,12 +45,15 @@ def create_Relation(relation_data: Use_DCreate):
     
     return new_relation
 
-# Actualizar relación de usuario y dispositivo
+
 @relation_R.put("/relation/{id}", response_model=Use_DResponse)
 def update_user(id: int, relation_data: Use_DCreate):
     db_relation = db.query(UserDevice).filter(UserDevice.id == id).first()
-    if db_relation is None:
-        raise HTTPException(status_code=404, detail="Relación no encontrada")
+    user = db.query(User).filter(User.id == relation_data.user_id).first()
+    dispositivo = db.query(Device).filter(Device.id == relation_data.device_id).first()
+
+    if (db_relation is None) or (user is None) or (dispositivo is None):
+        raise HTTPException(status_code=404, detail="Elemento no encontrada")
 
     db_relation.user_id = relation_data.user_id
     db_relation.device_id = relation_data.device_id
@@ -56,10 +63,11 @@ def update_user(id: int, relation_data: Use_DCreate):
     
     return db_relation
 
-# Eliminar relación de usuario y dispositivo
+
 @relation_R.delete("/relation/{id}", response_model=Use_DResponse)
 def delete_user(id: int):
     usuario = db.query(UserDevice).filter(UserDevice.id == id).first()
+    
     if usuario is None:
         raise HTTPException(status_code=404, detail="Relación no encontrada")
     
