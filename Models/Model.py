@@ -6,8 +6,8 @@ from Database.Base import Base, engine
 class Location(Base):
     __tablename__ = "locations"
     id = Column(BigInteger, primary_key=True, index=True)
-    latitude = Column(Numeric)
-    longitude = Column(Numeric)
+    latitude = Column(Text)
+    longitude = Column(Text)
     name_place = Column(Text)
     devices = relationship("Device", back_populates="location")
 
