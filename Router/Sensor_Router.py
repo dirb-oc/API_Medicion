@@ -50,7 +50,7 @@ def create_sensor(sensor_data: SensorCreate):
 
 @sensor_R.put("/sensor/{id}", response_model=SensorResponse)
 def update_sensor(id: int, sensor_data: SensorCreate):
-    db_sensor = db.query(Sensor).filter(sensor_data.id == id).first()
+    db_sensor = db.query(Sensor).filter(Sensor.id == id).first()
     unidad = db.query(Unit).filter(Unit.id == sensor_data.unit_id).first()
     dispositivo = db.query(Device).filter(Device.id == sensor_data.device_id).first()
     
