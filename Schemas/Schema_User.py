@@ -10,6 +10,7 @@ class UserCreate(BaseModel):
 # Pydantic model para mostrar un usuario
 class UserResponse(BaseModel):
     id: int
+    name: str
     email: str
     secondname: str
     person: int
