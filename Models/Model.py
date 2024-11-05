@@ -25,6 +25,7 @@ class Unit(Base):
     __tablename__ = "unit"
     id = Column(BigInteger, primary_key=True, index=True)
     unit = Column(Text)
+    description = Column(Text)
     sensors = relationship("Sensor", back_populates="unit")
 
 class Sensor(Base):
