@@ -29,6 +29,7 @@ def Search_Unit(id: int):
 def Create_Unit(unit_data: UnitCreate):
     new_unidad = Unit(
         unit = unit_data.unit,
+        description = unit_data.description,
     )
 
     db.add(new_unidad)
@@ -46,6 +47,7 @@ def update_Unit(id: int, unit_data: UnitCreate):
         raise HTTPException(status_code=404, detail="Unidad de medida no encontrado")
     
     db_unidad.unit = unit_data.unit
+    db_unidad.description = unit_data.description
 
     db.commit()
     db.refresh(db_unidad)
