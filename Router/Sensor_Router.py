@@ -68,14 +68,14 @@ def update_sensor(id: int, sensor_data: SensorCreate):
     return db_sensor
 
 
-@sensor_R.delete("/sensor/{id}", response_model=dict)
+@sensor_R.delete("/sensor/{id}", response_model=SensorResponse)
 def delete_sensor(id: int):
-    sensor = db.query(Sensor).filter(Sensor.id == id).first()
+    dato = db.query(Sensor).filter(Sensor.id == id).first()
     
-    if sensor is None:
+    if dato is None:
         raise HTTPException(status_code=404, detail="Sensor no encontrado")
     
-    db.delete(sensor)
+    db.delete(dato)
     db.commit()
     
-    return sensor
+    return dato
